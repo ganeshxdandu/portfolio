@@ -16,7 +16,6 @@ html, body{
     height: 100%;
     width: 100%;
     font-family: 'Satoshi', sans-serif;
-    overflow: hidden;
 }
 
 .main{
@@ -26,8 +25,9 @@ html, body{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: white;
+    position: relative;
     overflow: hidden;
+    background-color: white;
 }
 
 .main h1{
@@ -68,12 +68,31 @@ html, body{
     filter: blur(200px);
     z-index: 0;
     opacity: 0.5;
+    top: 60%;
+    left: 70%;
 }
 
 .object2{
     background-color: #00bfff;
     width: 300px;
     height: 300px;
-    top: 60%;
-    left: 70%;
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+    .main h1 {
+        font-size: 1.5rem;
+    }
+
+    .main p {
+        font-size: 1rem;
+        max-width: 300px;
+        line-height: 1.9;
+    }
 }

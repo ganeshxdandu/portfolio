@@ -97,7 +97,7 @@ html, body{
     height: 150px;
     border-radius: 10px;
     margin-bottom: 1.5rem;
-    box-shadow: 0 4px 10px #0000004c;
+    box-shadow: 0 4px 5px #0000004c;
 }
 
 @media (max-width: 768px) {

@@ -71,7 +71,8 @@
 
         <!-- Theme -->
 
-        <meta name="theme-color" content="#F7F7F7" />
+        <meta name="theme-color" content="#F7F7F7" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#0F0F0F" media="(prefers-color-scheme: dark)" />
 
         <!-- Favicon -->
 
@@ -95,6 +96,22 @@
         />
     </head>
     <body>
+        <!--
+          Blocking theme script — runs before React, before CSS paint.
+          Priority: 1) localStorage  2) system prefers-color-scheme  3) light
+          Zero flash of wrong theme guaranteed.
+        -->
+        <script>
+            (function () {
+                try {
+                    var saved = localStorage.getItem('theme');
+                    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (saved === 'dark' || (!saved && prefersDark)) {
+                        document.documentElement.classList.add('dark');
+                    }
+                } catch (e) {}
+            })();
+        </script>
         <div id="root"></div>
         <script type="module" src="/src/main.jsx"></script>
     </body>

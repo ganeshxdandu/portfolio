@@ -5,7 +5,7 @@ import { useTheme } from "../App";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { isDark, toggleTheme } = useTheme();
+    const { isDark, toggleTheme, lenisRef } = useTheme();
 
     const navlinks = [
         { name: "About",    link: "#about"    },
@@ -13,12 +13,69 @@ const Navbar = () => {
         { name: "Contact",  link: "#contact"  },
     ];
 
+    /* ── Smooth scroll via Lenis ── */
+    const scrollTo = useCallback((hash) => {
+        const target = document.querySelector(hash);
+        if (!target) return;
+
+        if (lenisRef?.current) {
+            lenisRef.current.scrollTo(target, { offset: 0, duration: 1.4 });
+        } else {
+            target.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [lenisRef]);
+
+    /* ── Desktop link click ── */
+    const handleDesktopLink = useCallback((e, hash) => {
+        e.preventDefault();
+        scrollTo(hash);
+    }, [scrollTo]);
+
+    /* ── Mobile link click ── */
+    const handleMobileLink = useCallback((e, hash) => {
+        e.preventDefault();
+        setIsOpen(false);
+        // Wait for menu close animation (250ms) then scroll
+        setTimeout(() => scrollTo(hash), 300);
+    }, [scrollTo]);
+
+    /* ── Theme toggle ── */
     const handleThemeToggle = useCallback((e) => {
         const rect = e.currentTarget.getBoundingClientRect();
-        const x = rect.left + rect.width  / 2;
-        const y = rect.top  + rect.height / 2;
-        toggleTheme(x, y);
+        toggleTheme(
+            rect.left + rect.width  / 2,
+            rect.top  + rect.height / 2
+        );
     }, [toggleTheme]);
+
+    /* ── Shared icon swap animation ── */
+    const ThemeIcon = ({ suffix = "" }) => (
+        <AnimatePresence mode="wait" initial={false}>
+            {isDark ? (
+                <motion.span
+                    key={`sun${suffix}`}
+                    initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                    animate={{ rotate: 0,   opacity: 1, scale: 1   }}
+                    exit   ={{ rotate:  90, opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ display: "flex" }}
+                >
+                    <SunIcon size={20} />
+                </motion.span>
+            ) : (
+                <motion.span
+                    key={`moon${suffix}`}
+                    initial={{ rotate:  90, opacity: 0, scale: 0.5 }}
+                    animate={{ rotate:   0, opacity: 1, scale: 1   }}
+                    exit   ={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                    transition={{ duration: 0.2 }}
+                    style={{ display: "flex" }}
+                >
+                    <MoonIcon size={20} />
+                </motion.span>
+            )}
+        </AnimatePresence>
+    );
 
     return (
         <motion.nav
@@ -41,56 +98,34 @@ const Navbar = () => {
                     transition={{ duration: 0.2, ease: "easeOut" }}
                     className="text-[28px] font-outfit tracking-[-3px] cursor-pointer select-none"
                     style={{ color: "var(--color-text-primary)" }}
+                    onClick={() => lenisRef?.current?.scrollTo(0, { duration: 1.4 })}
                 >
                     GD
                 </motion.h1>
 
-                {/* Desktop Nav */}
+                {/* ── Desktop Nav ── */}
                 <div className="hidden md:flex items-center gap-4">
                     <div className="flex gap-6 items-center">
+
                         {navlinks.map((link, index) => (
                             <motion.a
                                 key={index}
                                 href={link.link}
+                                onClick={(e) => handleDesktopLink(e, link.link)}
                                 whileHover={{ y: -2 }}
                                 transition={{ duration: 0.2 }}
                                 className="
-                                    relative
-                                    tracking-tight
-                                    text-[14px]
-                                    font-outfit
-                                    font-light
-                                    after:absolute
-                                    after:left-0
-                                    after:-bottom-1
-                                    after:h-px
-                                    after:w-0
-                                    after:transition-all
-                                    after:duration-300
+                                    relative tracking-tight text-[14px]
+                                    font-outfit font-light
+                                    after:absolute after:left-0 after:-bottom-1
+                                    after:h-px after:w-0 after:transition-all after:duration-300
                                     hover:after:w-full
                                 "
-                                style={{
-                                    color: "var(--color-text-secondary)",
-                                    "--tw-after-bg": "var(--color-text-primary)",
-                                }}
+                                style={{ color: "var(--color-text-secondary)" }}
                                 onMouseEnter={e => e.currentTarget.style.color = "var(--color-text-primary)"}
                                 onMouseLeave={e => e.currentTarget.style.color = "var(--color-text-secondary)"}
                             >
-                                <span
-                                    className="
-                                        after:absolute
-                                        after:left-0
-                                        after:-bottom-1
-                                        after:h-px
-                                        after:w-0
-                                        after:transition-all
-                                        after:duration-300
-                                        hover:after:w-full
-                                    "
-                                    style={{ "--after-bg": "var(--color-text-primary)" }}
-                                >
-                                    {link.name}
-                                </span>
+                                {link.name}
                             </motion.a>
                         ))}
 
@@ -110,11 +145,7 @@ const Navbar = () => {
                         </motion.a>
                     </div>
 
-                    {/* Divider */}
-                    <div
-                        className="w-px h-4"
-                        style={{ backgroundColor: "var(--color-border-md)" }}
-                    />
+                    <div className="w-px h-4" style={{ backgroundColor: "var(--color-border-md)" }} />
 
                     {/* Theme Toggle – Desktop */}
                     <motion.button
@@ -128,35 +159,11 @@ const Navbar = () => {
                         onMouseLeave={e => e.currentTarget.style.backgroundColor = "transparent"}
                         aria-label="Toggle theme"
                     >
-                        <AnimatePresence mode="wait" initial={false}>
-                            {isDark ? (
-                                <motion.span
-                                    key="sun"
-                                    initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
-                                    animate={{ rotate: 0,   opacity: 1, scale: 1   }}
-                                    exit   ={{ rotate:  90, opacity: 0, scale: 0.5 }}
-                                    transition={{ duration: 0.2 }}
-                                    style={{ display: "flex" }}
-                                >
-                                    <SunIcon size={20} />
-                                </motion.span>
-                            ) : (
-                                <motion.span
-                                    key="moon"
-                                    initial={{ rotate: 90,  opacity: 0, scale: 0.5 }}
-                                    animate={{ rotate: 0,   opacity: 1, scale: 1   }}
-                                    exit   ={{ rotate: -90, opacity: 0, scale: 0.5 }}
-                                    transition={{ duration: 0.2 }}
-                                    style={{ display: "flex" }}
-                                >
-                                    <MoonIcon size={20} />
-                                </motion.span>
-                            )}
-                        </AnimatePresence>
+                        <ThemeIcon />
                     </motion.button>
                 </div>
 
-                {/* Mobile Nav Controls */}
+                {/* ── Mobile Nav Controls ── */}
                 <div className="flex md:hidden items-center gap-2">
 
                     {/* Theme Toggle – Mobile */}
@@ -169,31 +176,7 @@ const Navbar = () => {
                         onMouseLeave={e => e.currentTarget.style.backgroundColor = "transparent"}
                         aria-label="Toggle theme"
                     >
-                        <AnimatePresence mode="wait" initial={false}>
-                            {isDark ? (
-                                <motion.span
-                                    key="sun-m"
-                                    initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
-                                    animate={{ rotate: 0,   opacity: 1, scale: 1   }}
-                                    exit   ={{ rotate:  90, opacity: 0, scale: 0.5 }}
-                                    transition={{ duration: 0.2 }}
-                                    style={{ display: "flex" }}
-                                >
-                                    <SunIcon size={20} />
-                                </motion.span>
-                            ) : (
-                                <motion.span
-                                    key="moon-m"
-                                    initial={{ rotate: 90,  opacity: 0, scale: 0.5 }}
-                                    animate={{ rotate: 0,   opacity: 1, scale: 1   }}
-                                    exit   ={{ rotate: -90, opacity: 0, scale: 0.5 }}
-                                    transition={{ duration: 0.2 }}
-                                    style={{ display: "flex" }}
-                                >
-                                    <MoonIcon size={20} />
-                                </motion.span>
-                            )}
-                        </AnimatePresence>
+                        <ThemeIcon suffix="-m" />
                     </motion.button>
 
                     {/* Hamburger */}
@@ -210,7 +193,7 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
+            {/* ── Mobile Menu ── */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -229,7 +212,7 @@ const Navbar = () => {
                                     <motion.a
                                         key={index}
                                         href={link.link}
-                                        onClick={() => setIsOpen(false)}
+                                        onClick={(e) => handleMobileLink(e, link.link)}
                                         initial={{ opacity: 0, x: -10 }}
                                         animate={{ opacity: 1, x:  0  }}
                                         transition={{ delay: index * 0.05 }}
@@ -239,6 +222,7 @@ const Navbar = () => {
                                         {link.name}
                                     </motion.a>
                                 ))}
+
                                 <motion.a
                                     whileHover={{ y: -1 }}
                                     whileTap={{ scale: 0.98 }}

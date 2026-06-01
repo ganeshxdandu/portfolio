@@ -1,4 +1,5 @@
-import { useState, createContext, useContext, useCallback, useRef } from "react";
+import { useState, createContext, useContext, useCallback, useRef, useEffect } from "react";
+import Lenis from "lenis";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Hero from "./components/Hero";
@@ -18,8 +19,37 @@ const easeInOutCubic = (t) =>
 
 /* ── App ────────────────────────────────────────────────────────── */
 const App = () => {
-    const [isDark, setIsDark] = useState(false);
-    const rafRef = useRef(null);
+    // Sync with whatever the blocking <script> in index.html already set
+    const [isDark, setIsDark] = useState(
+        () => document.documentElement.classList.contains("dark")
+    );
+    const rafRef   = useRef(null);
+    const lenisRef = useRef(null);
+
+    /* ── Lenis smooth scroll ── */
+    useEffect(() => {
+        const lenis = new Lenis({
+            duration:  1.4,
+            easing:    (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smoothWheel: true,
+            smoothTouch: false,   // native feel on mobile touch
+        });
+
+        lenisRef.current = lenis;
+
+        let frameId;
+        const raf = (time) => {
+            lenis.raf(time);
+            frameId = requestAnimationFrame(raf);
+        };
+        frameId = requestAnimationFrame(raf);
+
+        return () => {
+            cancelAnimationFrame(frameId);
+            lenis.destroy();
+            lenisRef.current = null;
+        };
+    }, []);
 
     /**
      * toggleTheme(originX, originY)
@@ -72,6 +102,9 @@ const App = () => {
                     }
                     setIsDark(nextDark);
 
+                    // Persist preference
+                    try { localStorage.setItem("theme", nextDark ? "dark" : "light"); } catch (_) {}
+
                     /* ── Frame B+: animate the growing hole ── */
                     const maxR = Math.hypot(window.innerWidth, window.innerHeight) * 1.15;
                     const startTime = performance.now();
@@ -99,7 +132,7 @@ const App = () => {
     );
 
     return (
-        <ThemeContext.Provider value={{ isDark, toggleTheme }}>
+        <ThemeContext.Provider value={{ isDark, toggleTheme, lenisRef }}>
             {/* Full-screen overlay driven by JS mask animation */}
             <div id="theme-reveal" />
 

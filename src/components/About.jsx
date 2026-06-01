@@ -38,7 +38,7 @@ const About = () => {
                         delay: 0.1,
                         duration: 0.5,
                     }}
-                    className="flex items-center gap-3 mb-8"
+                    className="flex items-center gap-3 mb-6"
                 >
                     <div className="h-5 w-px bg-[#D9D9D9]" />
 

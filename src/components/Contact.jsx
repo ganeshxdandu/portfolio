@@ -83,7 +83,7 @@ const Contact = () => {
                             transition={{
                                 duration: 0.2,
                             }}
-                            href="mailto:hello@ganeshdandu.com"
+                            href="mailto:ganeshdandu.co@gmail.com"
                             className="
                             flex
                             items-start
@@ -115,7 +115,7 @@ const Contact = () => {
                                     font-normal
                                     "
                                 >
-                                    hello@ganeshdandu.com
+                                    ganeshdandu.co@gmail.com
                                 </p>
                             </div>
 
@@ -138,7 +138,8 @@ const Contact = () => {
                             transition={{
                                 duration: 0.2,
                             }}
-                            href="#"
+                            href="https://cal.com/ganesh-dandu-znj6u9/book?overlayCalendar=true"
+                            target="_blank"
                             className="
                             flex
                             items-start

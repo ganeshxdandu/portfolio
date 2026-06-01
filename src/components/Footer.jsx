@@ -111,7 +111,7 @@ const Footer = () => {
                         {[
                             {
                                 label: "X",
-                                href: "#",
+                                href: "https://x.com/ganeshxdandu",
                             },
                             {
                                 label: "LinkedIn",
@@ -119,7 +119,7 @@ const Footer = () => {
                             },
                             {
                                 label: "Email",
-                                href: "mailto:hello@ganeshdandu.com",
+                                href: "mailto:ganeshdandu.co@gmail.com",
                             },
                         ].map((item) => (
                             <motion.a
@@ -142,6 +142,7 @@ const Footer = () => {
                                 font-light
                                 group
                                 "
+                                target="_blank"
                             >
                                 {item.label}
 

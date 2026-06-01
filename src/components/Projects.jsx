@@ -11,25 +11,25 @@ const projects = [
         name: "Mercedes Esthetica",
         description: "Premium Skincare Clinic · Hyderabad",
         image: Project1,
-        link: "#",
+        link: "https://mercedes-esthetica.vercel.app/",
     },
     {
         name: "Skinthority",
         description: "Aesthetic Academy · Ludhiana",
         image: Project2,
-        link: "#",
+        link: "https://skinthority.vercel.app/",
     },
     {
         name: "Innovative Cure",
         description: "Premium Skincare Clinic · Kolkata",
         image: Project3,
-        link: "#",
+        link: "https://innovative-cure.vercel.app/",
     },
     {
         name: "3Sixty Studio",
         description: "Ladies Salon & Aesthetics · Kolkata",
         image: Project4,
-        link: "#",
+        link: "https://3sixty.vercel.app/",
     },
 ];
 

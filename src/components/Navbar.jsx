@@ -100,7 +100,7 @@ const Navbar = () => {
                             </motion.a>
                         ))}
 
-                        <motion.button
+                        <motion.a
                             whileHover={{
                                 y: -2,
                                 scale: 1.01,
@@ -122,9 +122,11 @@ const Navbar = () => {
                             cursor-pointer
                             shadow-sm
                             "
+                            href="https://cal.com/ganesh-dandu-znj6u9/book?overlayCalendar=true"
+                            target="_blank"
                         >
-                            Book A Call
-                        </motion.button>
+                            Let's Talk
+                        </motion.a>
                     </div>
 
                     <div className="w-px h-4 bg-[#d9d9d9]" />

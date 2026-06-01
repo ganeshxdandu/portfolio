@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 
 const About = () => {
     return (
-        <section className="w-full">
+        <section id="about" className="w-full scroll-mt-24">
             <motion.div
                 initial={{
                     opacity: 0,

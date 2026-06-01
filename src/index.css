@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
-body{
+html, body{
   font-family: 'Outfit', sans-serif;
   background-color: #F7F7F7;
+  scroll-behavior: smooth;
 }
 
 @theme{

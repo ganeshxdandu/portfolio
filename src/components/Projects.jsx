@@ -35,7 +35,7 @@ const projects = [
 
 const Projects = () => {
     return (
-        <section className="w-full">
+        <section id="projects" className="w-full scroll-mt-24">
             <div className="max-w-150 mx-auto py-12 px-5 lg:px-0">
                 {/* Heading */}
 

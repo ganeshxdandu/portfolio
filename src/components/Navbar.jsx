@@ -237,22 +237,19 @@ const Navbar = () => {
                                         {link.name}
                                     </motion.a>
                                 ))}
-
-                                <motion.button
+                                <motion.a
+                                    whileHover={{
+                                        y: -1,
+                                    }}
                                     whileTap={{
                                         scale: 0.98,
                                     }}
-                                    className="
-                                    mt-3
-                                    bg-[#262626]
-                                    text-white
-                                    py-3
-                                    rounded-sm
-                                    text-[14px]
-                                    "
+                                    href="https://cal.com/ganesh-dandu-znj6u9/book?overlayCalendar=true"
+                                    target="_blank"
+                                    className="mt-4 h-11 w-full flex items-center justify-center rounded-sm bg-[#262626] text-[#F7F7F7] text-[14px] tracking-tight font-light transition-all duration-300 "
                                 >
-                                    Book A Call
-                                </motion.button>
+                                    Let's Talk
+                                </motion.a>
                             </div>
                         </div>
                     </motion.div>

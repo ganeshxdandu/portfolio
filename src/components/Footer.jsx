@@ -44,7 +44,7 @@ const Footer = () => {
                             text-[28px]
                             tracking-[-0.08em]
                             text-[#262626]
-                            mb-3
+                            mb-2
                             "
                         >
                             GD
@@ -55,7 +55,7 @@ const Footer = () => {
                             text-[14px]
                             text-[#4D4D4D]
                             tracking-tight
-                            leading-7
+                            leading-4
                             font-light
                             "
                         >

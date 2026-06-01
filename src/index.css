@@ -1,27 +1,88 @@
 @import "tailwindcss";
 
-html, body{
-  font-family: 'Outfit', sans-serif;
-  background-color: #F7F7F7;
-  scroll-behavior: smooth;
+/* ─── Design Tokens ──────────────────────────────────────────────── */
+
+@theme {
+  --color-bg:          #F7F7F7;
+  --color-bg-nav:      rgba(247, 247, 247, 0.80);
+  --color-bg-card:     #FAFAFA;
+  --color-bg-hover:    #ECECEC;
+  --color-bg-hover-sm: #FFFFFF;
+
+  --color-text-primary:   #262626;
+  --color-text-secondary: #4D4D4D;
+  --color-text-muted:     #666666;
+  --color-text-subtle:    #999999;
+  --color-text-faint:     #BDBDBD;
+
+  --color-border:     #ECECEC;
+  --color-border-md:  #D9D9D9;
+  --color-border-lg:  #DDDDDD;
+  --color-border-nav: #E5E5E5;
+
+  --color-surface:    #F7F7F7;
+  --color-on-surface: #262626;
+
+  --color-green:      #22C55E;
+  --color-blue:       #008EE7;
 }
 
-@theme{
-  --text-heading: #262626;
+/* ─── Dark mode token overrides ──────────────────────────────────── */
+
+html.dark {
+  color-scheme: dark;
+
+  --color-bg:          #0F0F0F;
+  --color-bg-nav:      rgba(15, 15, 15, 0.85);
+  --color-bg-card:     #181818;
+  --color-bg-hover:    #252525;
+  --color-bg-hover-sm: #1F1F1F;
+
+  --color-text-primary:   #EFEFEF;
+  --color-text-secondary: #A8A8A8;
+  --color-text-muted:     #777777;
+  --color-text-subtle:    #555555;
+  --color-text-faint:     #444444;
+
+  --color-border:     #2A2A2A;
+  --color-border-md:  #383838;
+  --color-border-lg:  #303030;
+  --color-border-nav: #222222;
+
+  --color-surface:    #EFEFEF;
+  --color-on-surface: #0F0F0F;
 }
+
+/* ─── Base ───────────────────────────────────────────────────────── */
+
+html, body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  scroll-behavior: smooth;
+  /* NO transition here — overlay handles the visual change */
+}
+
+/* ─── Theme-reveal overlay ───────────────────────────────────────── */
+/*
+  This is a full-screen element whose background is set to the OLD
+  theme colour by JavaScript. A growing transparent hole is animated
+  into it via JS mask-image, revealing the already-switched new theme
+  content beneath. No CSS animation / @property needed.
+*/
+#theme-reveal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-color: transparent; /* JS sets this before each reveal */
+}
+
+/* ─── Text animations ────────────────────────────────────────────── */
 
 @keyframes fadeText {
-    from {
-        opacity: 0;
-        transform: translateY(4px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.fade-text {
-    animation: fadeText 0.4s ease;
-}
+.fade-text { animation: fadeText 0.4s ease; }

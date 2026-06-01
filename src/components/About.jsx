@@ -4,81 +4,43 @@ const About = () => {
     return (
         <section id="about" className="w-full scroll-mt-24">
             <motion.div
-                initial={{
-                    opacity: 0,
-                    y: 20,
-                }}
-                whileInView={{
-                    opacity: 1,
-                    y: 0,
-                }}
-                viewport={{
-                    once: true,
-                    margin: "-100px",
-                }}
-                transition={{
-                    duration: 0.7,
-                    ease: [0.22, 1, 0.36, 1],
-                }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 className="max-w-150 mx-auto py-12 px-5 lg:px-0"
             >
                 <motion.div
-                    initial={{
-                        opacity: 0,
-                        x: -10,
-                    }}
-                    whileInView={{
-                        opacity: 1,
-                        x: 0,
-                    }}
-                    viewport={{
-                        once: true,
-                    }}
-                    transition={{
-                        delay: 0.1,
-                        duration: 0.5,
-                    }}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1, duration: 0.5 }}
                     className="flex items-center gap-3 mb-6"
                 >
-                    <div className="h-5 w-px bg-[#D9D9D9]" />
-
+                    <div
+                        className="h-5 w-px"
+                        style={{ backgroundColor: "var(--color-border-md)" }}
+                    />
                     <h2
-                        className="
-                        text-2xl
-                        text-[#262626]
-                        tracking-tighter
-                        "
+                        className="text-2xl tracking-tighter"
+                        style={{ color: "var(--color-text-primary)" }}
                     >
                         For Context
                     </h2>
                 </motion.div>
 
                 <motion.div
-                    initial={{
-                        opacity: 0,
-                    }}
-                    whileInView={{
-                        opacity: 1,
-                    }}
-                    viewport={{
-                        once: true,
-                    }}
-                    transition={{
-                        delay: 0.2,
-                        duration: 0.8,
-                    }}
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.2, duration: 0.8 }}
                     className="space-y-6"
                 >
                     <p
-                        className="
-                        text-[14px]
-                        text-[#4D4D4D]
-                        leading-7
-                        tracking-tight
-                        max-w-[65ch]
-                        "
+                        className="text-[14px] leading-7 tracking-tight max-w-[65ch]"
+                        style={{ color: "var(--color-text-secondary)" }}
                     >
-                        I enrolled in AI & ML and actually liked it —
+                        I enrolled in AI &amp; ML and actually liked it —
                         systems, logic, building things that work.
                         But somewhere along the way I got obsessed
                         with how things look and feel, not just how
@@ -88,13 +50,8 @@ const About = () => {
                     </p>
 
                     <p
-                        className="
-                        text-[14px]
-                        text-[#4D4D4D]
-                        leading-7
-                        tracking-tight
-                        max-w-[65ch]
-                        "
+                        className="text-[14px] leading-7 tracking-tight max-w-[65ch]"
+                        style={{ color: "var(--color-text-secondary)" }}
                     >
                         I don't just build websites and disappear. I
                         take your brief, design it from scratch,

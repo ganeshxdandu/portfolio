@@ -3,9 +3,39 @@ import { motion, AnimatePresence } from "motion/react";
 import { MoonIcon, SunIcon, ListIcon, XIcon } from "@phosphor-icons/react";
 import { useTheme } from "../App";
 
-const Navbar = () => {
+const ThemeIcon = ({ isDark, suffix = "" }) => (
+    <AnimatePresence mode="wait" initial={false}>
+        {isDark ? (
+            <motion.span
+                key={`sun${suffix}`}
+                initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                animate={{ rotate: 0,   opacity: 1, scale: 1   }}
+                exit   ={{ rotate:  90, opacity: 0, scale: 0.5 }}
+                transition={{ duration: 0.2 }}
+                style={{ display: "flex" }}
+            >
+                <SunIcon size={20} />
+            </motion.span>
+        ) : (
+            <motion.span
+                key={`moon${suffix}`}
+                initial={{ rotate:  90, opacity: 0, scale: 0.5 }}
+                animate={{ rotate:   0, opacity: 1, scale: 1   }}
+                exit   ={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                transition={{ duration: 0.2 }}
+                style={{ display: "flex" }}
+            >
+                <MoonIcon size={20} />
+            </motion.span>
+        )}
+    </AnimatePresence>
+);
+
+const Navbar = ({ view = "portfolio" }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { isDark, toggleTheme, lenisRef } = useTheme();
+
+    const isDiscovery = view === "discovery";
 
     const navlinks = [
         { name: "About",    link: "#about"    },
@@ -27,14 +57,28 @@ const Navbar = () => {
 
     /* ── Desktop link click ── */
     const handleDesktopLink = useCallback((e, hash) => {
+        if (hash === "#discovery" || hash === "#") {
+            if (hash === "#") {
+                e.preventDefault();
+                window.location.hash = "";
+            }
+            return;
+        }
         e.preventDefault();
         scrollTo(hash);
     }, [scrollTo]);
 
     /* ── Mobile link click ── */
     const handleMobileLink = useCallback((e, hash) => {
-        e.preventDefault();
         setIsOpen(false);
+        if (hash === "#discovery" || hash === "#") {
+            if (hash === "#") {
+                e.preventDefault();
+                setTimeout(() => { window.location.hash = ""; }, 300);
+            }
+            return;
+        }
+        e.preventDefault();
         // Wait for menu close animation (250ms) then scroll
         setTimeout(() => scrollTo(hash), 300);
     }, [scrollTo]);
@@ -44,41 +88,12 @@ const Navbar = () => {
         toggleTheme();
     }, [toggleTheme]);
 
-    /* ── Shared icon swap animation ── */
-    const ThemeIcon = ({ suffix = "" }) => (
-        <AnimatePresence mode="wait" initial={false}>
-            {isDark ? (
-                <motion.span
-                    key={`sun${suffix}`}
-                    initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
-                    animate={{ rotate: 0,   opacity: 1, scale: 1   }}
-                    exit   ={{ rotate:  90, opacity: 0, scale: 0.5 }}
-                    transition={{ duration: 0.2 }}
-                    style={{ display: "flex" }}
-                >
-                    <SunIcon size={20} />
-                </motion.span>
-            ) : (
-                <motion.span
-                    key={`moon${suffix}`}
-                    initial={{ rotate:  90, opacity: 0, scale: 0.5 }}
-                    animate={{ rotate:   0, opacity: 1, scale: 1   }}
-                    exit   ={{ rotate: -90, opacity: 0, scale: 0.5 }}
-                    transition={{ duration: 0.2 }}
-                    style={{ display: "flex" }}
-                >
-                    <MoonIcon size={20} />
-                </motion.span>
-            )}
-        </AnimatePresence>
-    );
-
     return (
         <motion.nav
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y:  0  }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full sticky top-0 z-50 border-b"
+            className="w-full sticky top-0 z-50 border-b no-print"
             style={{
                 backgroundColor: "var(--color-bg-nav)",
                 borderColor:     "var(--color-border-nav)",
@@ -94,104 +109,127 @@ const Navbar = () => {
                     transition={{ duration: 0.2, ease: "easeOut" }}
                     className="text-[28px] font-outfit tracking-[-3px] cursor-pointer select-none"
                     style={{ color: "var(--color-text-primary)" }}
-                    onClick={() => lenisRef?.current?.scrollTo(0, { duration: 1.4 })}
+                    onClick={() => {
+                        if (isDiscovery) {
+                            window.location.hash = "";
+                        } else {
+                            lenisRef?.current?.scrollTo(0, { duration: 1.4 });
+                        }
+                    }}
                 >
                     GD
                 </motion.h1>
 
-                {/* ── Desktop Nav ── */}
-                <div className="hidden md:flex items-center gap-4">
-                    <div className="flex gap-6 items-center">
-
-                        {navlinks.map((link, index) => (
-                            <motion.a
-                                key={index}
-                                href={link.link}
-                                onClick={(e) => handleDesktopLink(e, link.link)}
-                                whileHover={{ y: -2 }}
-                                transition={{ duration: 0.2 }}
-                                className="
-                                    relative tracking-tight text-[14px]
-                                    font-outfit font-light
-                                    after:absolute after:left-0 after:-bottom-1
-                                    after:h-px after:w-0 after:transition-all after:duration-300
-                                    hover:after:w-full
-                                "
-                                style={{ color: "var(--color-text-secondary)" }}
-                                onMouseEnter={e => e.currentTarget.style.color = "var(--color-text-primary)"}
-                                onMouseLeave={e => e.currentTarget.style.color = "var(--color-text-secondary)"}
-                            >
-                                {link.name}
-                            </motion.a>
-                        ))}
-
+                {/* ── Discovery Nav (Simplistic editorial link) ── */}
+                {isDiscovery ? (
+                    <div className="flex items-center gap-4">
                         <motion.a
-                            whileHover={{ y: -2, scale: 1.01 }}
-                            whileTap={{ scale: 0.98 }}
+                            href="#"
+                            onClick={(e) => handleDesktopLink(e, "#")}
+                            whileHover={{ x: -2 }}
                             transition={{ duration: 0.2 }}
-                            className="px-4 py-2 text-[14px] rounded-sm tracking-tight cursor-pointer shadow-sm"
-                            style={{
-                                backgroundColor: "var(--color-text-primary)",
-                                color:           "var(--color-bg)",
-                            }}
-                            href="https://cal.com/ganesh-dandu-znj6u9/book?overlayCalendar=true"
-                            target="_blank"
+                            className="text-[14px] font-outfit font-light tracking-tight text-[#666666] hover:text-[#262626] transition-colors duration-200"
                         >
-                            Let's Talk
+                            ← Back to Portfolio
                         </motion.a>
                     </div>
+                ) : (
+                    <>
+                        {/* ── Desktop Nav ── */}
+                        <div className="hidden md:flex items-center gap-4">
+                            <div className="flex gap-6 items-center">
 
-                    <div className="w-px h-4" style={{ backgroundColor: "var(--color-border-md)" }} />
+                                {navlinks.map((link, index) => (
+                                    <motion.a
+                                        key={index}
+                                        href={link.link}
+                                        onClick={(e) => handleDesktopLink(e, link.link)}
+                                        whileHover={{ y: -2 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="
+                                            relative tracking-tight text-[14px]
+                                            font-outfit font-light
+                                            after:absolute after:left-0 after:-bottom-1
+                                            after:h-px after:w-0 after:transition-all after:duration-300
+                                            hover:after:w-full
+                                        "
+                                        style={{ color: "var(--color-text-secondary)" }}
+                                        onMouseEnter={e => e.currentTarget.style.color = "var(--color-text-primary)"}
+                                        onMouseLeave={e => e.currentTarget.style.color = "var(--color-text-secondary)"}
+                                    >
+                                        {link.name}
+                                    </motion.a>
+                                ))}
 
-                    {/* Theme Toggle – Desktop */}
-                    <motion.button
-                        whileHover={{ rotate: 12, scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                        onClick={handleThemeToggle}
-                        className="cursor-pointer p-2 rounded-sm transition-colors duration-200"
-                        style={{ color: "var(--color-text-secondary)" }}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = "var(--color-bg-hover)"}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = "transparent"}
-                        aria-label="Toggle theme"
-                    >
-                        <ThemeIcon />
-                    </motion.button>
-                </div>
+                                <motion.a
+                                    whileHover={{ y: -2, scale: 1.01 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="px-4 py-2 text-[14px] rounded-sm tracking-tight cursor-pointer shadow-sm"
+                                    style={{
+                                        backgroundColor: "var(--color-text-primary)",
+                                        color:           "var(--color-bg)",
+                                    }}
+                                    href="https://cal.com/ganesh-dandu-znj6u9/book?overlayCalendar=true"
+                                    target="_blank"
+                                >
+                                    Let's Talk
+                                </motion.a>
+                            </div>
 
-                {/* ── Mobile Nav Controls ── */}
-                <div className="flex md:hidden items-center gap-2">
+                            <div className="w-px h-4" style={{ backgroundColor: "var(--color-border-md)" }} />
 
-                    {/* Theme Toggle – Mobile */}
-                    <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        onClick={handleThemeToggle}
-                        className="p-2 rounded-sm transition-colors duration-200"
-                        style={{ color: "var(--color-text-secondary)" }}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = "var(--color-bg-hover)"}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = "transparent"}
-                        aria-label="Toggle theme"
-                    >
-                        <ThemeIcon suffix="-m" />
-                    </motion.button>
+                            {/* Theme Toggle – Desktop */}
+                            <motion.button
+                                whileHover={{ rotate: 12, scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                                onClick={handleThemeToggle}
+                                className="cursor-pointer p-2 rounded-sm transition-colors duration-200"
+                                style={{ color: "var(--color-text-secondary)" }}
+                                onMouseEnter={e => e.currentTarget.style.backgroundColor = "var(--color-bg-hover)"}
+                                onMouseLeave={e => e.currentTarget.style.backgroundColor = "transparent"}
+                                aria-label="Toggle theme"
+                            >
+                                <ThemeIcon isDark={isDark} />
+                            </motion.button>
+                        </div>
 
-                    {/* Hamburger */}
-                    <motion.button
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="p-2 rounded-sm transition-colors duration-200"
-                        style={{ color: "var(--color-text-primary)" }}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = "var(--color-bg-hover)"}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = "transparent"}
-                    >
-                        {isOpen ? <XIcon size={22} /> : <ListIcon size={22} />}
-                    </motion.button>
-                </div>
+                        {/* ── Mobile Nav Controls ── */}
+                        <div className="flex md:hidden items-center gap-2">
+
+                            {/* Theme Toggle – Mobile */}
+                            <motion.button
+                                whileTap={{ scale: 0.95 }}
+                                onClick={handleThemeToggle}
+                                className="p-2 rounded-sm transition-colors duration-200"
+                                style={{ color: "var(--color-text-secondary)" }}
+                                onMouseEnter={e => e.currentTarget.style.backgroundColor = "var(--color-bg-hover)"}
+                                onMouseLeave={e => e.currentTarget.style.backgroundColor = "transparent"}
+                                aria-label="Toggle theme"
+                            >
+                                <ThemeIcon isDark={isDark} suffix="-m" />
+                            </motion.button>
+
+                            {/* Hamburger */}
+                            <motion.button
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => setIsOpen(!isOpen)}
+                                className="p-2 rounded-sm transition-colors duration-200"
+                                style={{ color: "var(--color-text-primary)" }}
+                                onMouseEnter={e => e.currentTarget.style.backgroundColor = "var(--color-bg-hover)"}
+                                onMouseLeave={e => e.currentTarget.style.backgroundColor = "transparent"}
+                            >
+                                {isOpen ? <XIcon size={22} /> : <ListIcon size={22} />}
+                            </motion.button>
+                        </div>
+                    </>
+                )}
             </div>
 
             {/* ── Mobile Menu ── */}
             <AnimatePresence>
-                {isOpen && (
+                {!isDiscovery && isOpen && (
                     <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}

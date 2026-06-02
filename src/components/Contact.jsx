@@ -1,8 +1,6 @@
 import { motion } from "motion/react";
 import {
     ArrowUpRightIcon,
-    EnvelopeSimpleIcon,
-    CalendarBlankIcon,
 } from "@phosphor-icons/react";
 
 const Contact = () => {

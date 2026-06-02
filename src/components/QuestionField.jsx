@@ -64,7 +64,7 @@ const QuestionField = ({ question, value, onChange, isFirst = false }) => {
                         value={value || ""}
                         onChange={(e) => onChange(e.target.value)}
                         placeholder={`Enter your ${question.label.toLowerCase()}...`}
-                        className="w-full bg-transparent border-b border-[#ECECEC] py-3 text-[16px] text-[#262626] font-light tracking-tight outline-hidden transition-colors duration-300 focus:border-[#262626]"
+                        className="w-full bg-transparent border-b border-border py-3 text-[16px] text-text-primary font-light tracking-tight outline-hidden transition-colors duration-300 focus:border-text-primary"
                     />
                 );
 
@@ -78,7 +78,7 @@ const QuestionField = ({ question, value, onChange, isFirst = false }) => {
                         onInput={handleTextareaInput}
                         placeholder="Write your answer here..."
                         rows={2}
-                        className="w-full bg-transparent border-b border-[#ECECEC] py-3 text-[16px] text-[#262626] font-light tracking-tight leading-relaxed outline-hidden resize-none transition-colors duration-300 focus:border-[#262626]"
+                        className="w-full bg-transparent border-b border-border py-3 text-[16px] text-text-primary font-light tracking-tight leading-relaxed outline-hidden resize-none transition-colors duration-300 focus:border-text-primary"
                     />
                 );
 
@@ -108,11 +108,11 @@ const QuestionField = ({ question, value, onChange, isFirst = false }) => {
                                             whileTap={{ scale: 0.95 }}
                                             className={`
                                                 w-5 h-5 rounded-[3px] border flex items-center justify-center transition-all duration-200
-                                                group-hover:border-[#262626]
+                                                group-hover:border-text-primary
                                                 ${
                                                     isChecked
-                                                        ? "bg-[#262626] border-[#262626] text-white"
-                                                        : "bg-transparent border-[#ECECEC]"
+                                                        ? "bg-text-primary border-text-primary text-bg"
+                                                        : "bg-transparent border-border"
                                                 }
                                             `}
                                         >
@@ -127,7 +127,7 @@ const QuestionField = ({ question, value, onChange, isFirst = false }) => {
                                             )}
                                         </motion.div>
                                     </div>
-                                    <span className="text-[14px] text-[#4D4D4D] font-light tracking-tight group-hover:text-[#262626] transition-colors duration-200">
+                                    <span className="text-[14px] text-text-secondary font-light tracking-tight group-hover:text-text-primary transition-colors duration-200">
                                         {option}
                                     </span>
                                 </label>
@@ -156,11 +156,11 @@ const QuestionField = ({ question, value, onChange, isFirst = false }) => {
         <div className="flex flex-col gap-2 py-4">
             <label
                 htmlFor={question.id}
-                className="text-[14px] tracking-tight font-medium text-[#262626] select-none flex items-center gap-1"
+                className="text-[14px] tracking-tight font-medium text-text-primary select-none flex items-center gap-1"
             >
                 {question.label}
                 {question.required && (
-                    <span className="text-[#999999] text-[12px] font-normal tracking-wide ml-1">(Required)</span>
+                    <span className="text-text-subtle text-[12px] font-normal tracking-wide ml-1">(Required)</span>
                 )}
             </label>
             {renderInput()}

@@ -32,30 +32,85 @@ const App = () => {
     const lenisRef = useRef(null);
     const animRef = useRef(null);
 
-    /* ── Hash-based Router ── */
+    /* ── Hash-based Router with Smooth Transition ── */
     useEffect(() => {
         const handleHashChange = () => {
             const nextView = window.location.hash === "#discovery" ? "discovery" : "portfolio";
-            setView(nextView);
-            window.scrollTo({ top: 0, behavior: "instant" });
+            
+            const overlay = document.getElementById("theme-overlay");
+            if (!overlay) {
+                setView(nextView);
+                const html = document.documentElement;
+                if (isDark) {
+                    html.classList.add("dark");
+                } else {
+                    html.classList.remove("dark");
+                }
+                window.scrollTo({ top: 0, behavior: "instant" });
+                return;
+            }
+
+            const FADE_IN = 400; // ms
+            const FADE_OUT = 600; // ms
+
+            // Match old state background
+            const currentDark = document.documentElement.classList.contains("dark");
+            const oldBg = currentDark ? "#0F0F0F" : "#F7F7F7";
+            const newBg = isDark ? "#0F0F0F" : "#F7F7F7";
+
+            if (animRef.current) {
+                animRef.current.cancel();
+            }
+
+            overlay.style.backgroundColor = oldBg;
+
+            const fadeIn = overlay.animate([{ opacity: 0 }, { opacity: 1 }], {
+                duration: FADE_IN,
+                easing: "ease-in-out",
+                fill: "forwards",
+            });
+            animRef.current = fadeIn;
+
+            fadeIn.finished.then(() => {
+                setView(nextView);
+
+                const html = document.documentElement;
+                if (isDark) {
+                    html.classList.add("dark");
+                } else {
+                    html.classList.remove("dark");
+                }
+
+                window.scrollTo({ top: 0, behavior: "instant" });
+                overlay.style.backgroundColor = newBg;
+
+                const fadeOut = overlay.animate([{ opacity: 1 }, { opacity: 0 }], {
+                    duration: FADE_OUT,
+                    easing: "ease-in-out",
+                    fill: "forwards",
+                });
+                animRef.current = fadeOut;
+
+                fadeOut.finished.then(() => {
+                    overlay.getAnimations().forEach((a) => a.cancel());
+                    overlay.style.backgroundColor = "";
+                    animRef.current = null;
+                });
+            });
         };
         window.addEventListener("hashchange", handleHashChange);
         return () => window.removeEventListener("hashchange", handleHashChange);
-    }, []);
+    }, [isDark]);
 
-    /* ── Force Light Theme on Discovery Page ── */
+    /* ── Sync Theme Class ── */
     useEffect(() => {
         const html = document.documentElement;
-        if (view === "discovery") {
-            html.classList.remove("dark");
+        if (isDark) {
+            html.classList.add("dark");
         } else {
-            if (isDark) {
-                html.classList.add("dark");
-            } else {
-                html.classList.remove("dark");
-            }
+            html.classList.remove("dark");
         }
-    }, [view, isDark]);
+    }, [isDark]);
 
     /* ── Lenis smooth scroll ── */
     useEffect(() => {

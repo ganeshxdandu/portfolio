@@ -227,16 +227,16 @@ const Questionnaire = () => {
     // ── Render Submitting View ──
     if (isSubmitting) {
         return (
-            <div className="w-full min-h-screen bg-[#F7F7F7] text-[#262626] font-outfit flex items-center justify-center py-24 px-5">
+            <div className="w-full min-h-screen bg-bg text-text-primary font-outfit flex items-center justify-center py-24 px-5">
                 <div className="text-center space-y-4">
                     <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-                        className="inline-block text-[#262626]"
+                        className="inline-block text-text-primary"
                     >
                         <SpinnerIcon size={32} />
                     </motion.div>
-                    <p className="text-[14px] text-[#666666] tracking-tight font-light">
+                    <p className="text-[14px] text-text-muted tracking-tight font-light">
                         Submitting your discovery brief to Formspree...
                     </p>
                 </div>
@@ -247,38 +247,38 @@ const Questionnaire = () => {
     // ── Render Completed Summary View ──
     if (isCompleted) {
         return (
-            <div className="w-full min-h-screen bg-[#F7F7F7] text-[#262626] font-outfit select-text print-container py-24 px-5 lg:px-0">
+            <div className="w-full min-h-screen bg-bg text-text-primary font-outfit select-text print-container py-24 px-5 lg:px-0">
                 <div className="max-w-[600px] mx-auto">
                     {/* Header */}
-                    <div className="border-b border-[#ECECEC] pb-10 mb-12 no-print">
-                        <div className="text-[12px] tracking-widest text-[#666666] uppercase mb-3">
+                    <div className="border-b border-border pb-10 mb-12 no-print">
+                        <div className="text-[12px] tracking-widest text-text-muted uppercase mb-3 font-medium">
                             Discovery Completed
                         </div>
-                        <h1 className="text-[32px] tracking-tight font-normal leading-tight mb-4">
+                        <h1 className="text-[32px] tracking-tight font-normal leading-tight mb-4 text-text-primary">
                             Your Onboarding Document is Ready
                         </h1>
-                        <p className="text-[14px] text-[#666666] font-light leading-relaxed mb-8">
+                        <p className="text-[14px] text-text-muted font-light leading-relaxed mb-8">
                             Thank you for taking the time to share your goals. Your brief has been submitted successfully. We have assembled a premium typographic summary of all your responses below. You can download it directly as a formatted PDF, copy a clean Markdown copy to your clipboard, or review your answers.
                         </p>
 
                         <div className="flex flex-wrap gap-3">
                             <button
                                 onClick={handlePrint}
-                                className="flex items-center gap-2 px-5 py-2.5 bg-[#262626] text-[#F7F7F7] border border-[#262626] text-[13px] tracking-tight font-light rounded-full cursor-pointer hover:opacity-90 active:scale-98 transition-all duration-200"
+                                className="flex items-center gap-2 px-5 py-2.5 bg-text-primary text-bg border border-text-primary text-[13px] tracking-tight font-light rounded-full cursor-pointer hover:opacity-90 active:scale-98 transition-all duration-200"
                             >
                                 <PrinterIcon size={16} />
                                 Print / Save PDF
                             </button>
                             <button
                                 onClick={handleCopyMarkdown}
-                                className="flex items-center gap-2 px-5 py-2.5 bg-transparent text-[#262626] border border-[#ECECEC] text-[13px] tracking-tight font-light rounded-full cursor-pointer hover:border-[#262626] active:scale-98 transition-all duration-200"
+                                className="flex items-center gap-2 px-5 py-2.5 bg-transparent text-text-primary border border-border text-[13px] tracking-tight font-light rounded-full cursor-pointer hover:border-text-primary active:scale-98 transition-all duration-200"
                             >
                                 <CopyIcon size={16} />
                                 {copied ? "Copied Summary!" : "Copy Markdown"}
                             </button>
                             <button
                                 onClick={handleRestart}
-                                className="flex items-center gap-2 px-5 py-2.5 bg-transparent text-[#666666] border border-transparent text-[13px] tracking-tight font-light rounded-full cursor-pointer hover:text-[#262626] active:scale-98 transition-all duration-200"
+                                className="flex items-center gap-2 px-5 py-2.5 bg-transparent text-text-muted border border-transparent text-[13px] tracking-tight font-light rounded-full cursor-pointer hover:text-text-primary active:scale-98 transition-all duration-200"
                             >
                                 <ArrowCounterClockwiseIcon size={16} />
                                 Reset Answers
@@ -310,19 +310,19 @@ const Questionnaire = () => {
                             return (
                                 <div
                                     key={section.id}
-                                    className="border-b border-[#ECECEC] pb-12 last:border-0 last:pb-0"
+                                    className="border-b border-border pb-12 last:border-0 last:pb-0"
                                 >
                                     <div className="flex items-baseline gap-4 mb-8">
-                                        <span className="text-[20px] font-light text-[#999999] tracking-tight font-outfit">
+                                        <span className="text-[20px] font-light text-text-subtle tracking-tight font-outfit">
                                             {section.number}
                                         </span>
-                                        <h2 className="text-[20px] font-normal tracking-tight font-outfit">
+                                        <h2 className="text-[20px] font-normal tracking-tight font-outfit text-text-primary">
                                             {section.title}
                                         </h2>
                                     </div>
 
                                     {!hasAnyAnswers ? (
-                                        <p className="text-[14px] text-[#999999] font-light italic">
+                                        <p className="text-[14px] text-text-subtle font-light italic">
                                             No questions answered in this section.
                                         </p>
                                     ) : (
@@ -335,11 +335,11 @@ const Questionnaire = () => {
 
                                                 return (
                                                     <div key={q.id} className="space-y-2">
-                                                        <h3 className="text-[13px] font-medium text-[#666666] tracking-tight select-none">
+                                                        <h3 className="text-[13px] font-medium text-text-muted tracking-tight select-none">
                                                             {q.label}
                                                         </h3>
                                                         {isValEmpty ? (
-                                                            <p className="text-[14px] text-[#BDBDBD] font-light italic select-none">
+                                                            <p className="text-[14px] text-text-faint font-light italic select-none">
                                                                 Not provided
                                                             </p>
                                                         ) : Array.isArray(answer) ? (
@@ -347,14 +347,14 @@ const Questionnaire = () => {
                                                                 {answer.map((item) => (
                                                                     <span
                                                                         key={item}
-                                                                        className="px-3 py-1 bg-transparent border border-[#ECECEC] text-[12px] text-[#262626] font-light rounded-full"
+                                                                        className="px-3 py-1 bg-transparent border border-border text-[12px] text-text-primary font-light rounded-full"
                                                                     >
                                                                         {item}
                                                                     </span>
                                                                 ))}
                                                             </div>
                                                         ) : (
-                                                            <p className="text-[15px] text-[#262626] font-light tracking-tight leading-relaxed whitespace-pre-wrap">
+                                                            <p className="text-[15px] text-text-primary font-light tracking-tight leading-relaxed whitespace-pre-wrap">
                                                                 {answer}
                                                             </p>
                                                         )}
@@ -369,10 +369,10 @@ const Questionnaire = () => {
                     </div>
 
                     {/* Back to Portfolio CTA */}
-                    <div className="mt-20 pt-8 border-t border-[#ECECEC] text-center no-print">
+                    <div className="mt-20 pt-8 border-t border-border text-center no-print">
                         <a
                             href="#"
-                            className="inline-flex items-center gap-2 text-[14px] text-[#666666] tracking-tight font-light hover:text-[#262626] transition-colors duration-200"
+                            className="inline-flex items-center gap-2 text-[14px] text-text-muted tracking-tight font-light hover:text-text-primary transition-colors duration-200"
                         >
                             <ArrowLeftIcon size={14} />
                             Return to Portfolio Homepage
@@ -385,23 +385,23 @@ const Questionnaire = () => {
 
     // ── Render Form Steps ──
     return (
-        <div className="w-full min-h-screen bg-[#F7F7F7] text-[#262626] font-outfit py-24 px-5 lg:px-0">
+        <div className="w-full min-h-screen bg-bg text-text-primary font-outfit py-24 px-5 lg:px-0">
             <div className="max-w-[600px] mx-auto flex flex-col justify-between min-h-[70vh]">
                 <div>
                     {/* Header bar: Title and Step indicator */}
-                    <div className="flex items-center justify-between border-b border-[#ECECEC] pb-4 mb-8 select-none">
-                        <h1 className="text-[12px] tracking-widest text-[#666666] uppercase font-medium">
+                    <div className="flex items-center justify-between border-b border-border pb-4 mb-8 select-none">
+                        <h1 className="text-[12px] tracking-widest text-text-muted uppercase font-medium">
                             Website Discovery
                         </h1>
-                        <div className="text-[13px] tracking-widest text-[#999999] font-light">
+                        <div className="text-[13px] tracking-widest text-text-subtle font-light">
                             {currentSection.number} &nbsp;/&nbsp; {ENRICHED_SECTIONS[0].number === "01" ? "09" : ENRICHED_SECTIONS.length.toString().padStart(2, "0")}
                         </div>
                     </div>
 
                     {/* Ultra-thin elegant progress timeline */}
-                    <div className="w-full h-[1px] bg-[#ECECEC] mb-12 relative select-none">
+                    <div className="w-full h-[1px] bg-border mb-12 relative select-none">
                         <div
-                            className="h-[1.5px] bg-[#262626] absolute top-[-0.25px] left-0 transition-all duration-500 ease-out"
+                            className="h-[1.5px] bg-text-primary absolute top-[-0.25px] left-0 transition-all duration-500 ease-out"
                             style={{ width: `${progressPercent}%` }}
                         />
                     </div>
@@ -424,13 +424,13 @@ const Questionnaire = () => {
                             >
                                 {/* Step Introduction */}
                                 <div className="mb-8 select-none">
-                                    <div className="text-[48px] font-light text-[#ECECEC] leading-none mb-1 tracking-tight">
+                                    <div className="text-[48px] font-light text-border leading-none mb-1 tracking-tight">
                                         {currentSection.number}
                                     </div>
-                                    <h2 className="text-[22px] font-normal tracking-tight leading-tight text-[#262626] mb-2">
+                                    <h2 className="text-[22px] font-normal tracking-tight leading-tight text-text-primary mb-2">
                                         {currentSection.title}
                                     </h2>
-                                    <p className="text-[14px] text-[#666666] font-light leading-relaxed">
+                                    <p className="text-[14px] text-text-muted font-light leading-relaxed">
                                         {currentSection.description}
                                     </p>
                                 </div>
@@ -454,14 +454,14 @@ const Questionnaire = () => {
 
                 {/* Submit Error Message */}
                 {submitError && (
-                    <div className="mt-4 px-4 py-2 border border-[#ECECEC] text-[13px] text-[#E11D48] bg-white rounded-md font-light text-center select-none">
+                    <div className="mt-4 px-4 py-2 border border-border text-[13px] text-[#E11D48] bg-bg-card rounded-md font-light text-center select-none">
                         {submitError}
                         <button
                             onClick={() => {
                                 setIsCompleted(true);
                                 saveProgress(answers, currentStep, true);
                             }}
-                            className="ml-2 underline font-normal text-[#262626] cursor-pointer"
+                            className="ml-2 underline font-normal text-text-primary cursor-pointer"
                         >
                             Skip to Summary
                         </button>
@@ -469,7 +469,7 @@ const Questionnaire = () => {
                 )}
 
                 {/* Footer Controls: Back & Next */}
-                <div className="flex items-center justify-between border-t border-[#ECECEC] pt-8 mt-12 select-none">
+                <div className="flex items-center justify-between border-t border-border pt-8 mt-12 select-none">
                     <button
                         type="button"
                         onClick={handleBack}
@@ -480,7 +480,7 @@ const Questionnaire = () => {
                             ${
                                 currentStep === 0
                                     ? "opacity-0 pointer-events-none"
-                                    : "text-[#666666] hover:text-[#262626]"
+                                    : "text-text-muted hover:text-text-primary"
                             }
                         `}
                     >
@@ -492,7 +492,7 @@ const Questionnaire = () => {
                         <button
                             type="button"
                             onClick={handleRestart}
-                            className="text-[13px] tracking-tight font-light text-[#999999] hover:text-[#262626] transition-colors duration-200 px-3 py-2 cursor-pointer"
+                            className="text-[13px] tracking-tight font-light text-text-subtle hover:text-text-primary transition-colors duration-200 px-3 py-2 cursor-pointer"
                         >
                             Reset
                         </button>
@@ -506,8 +506,8 @@ const Questionnaire = () => {
                                 border transition-all duration-300 select-none
                                 ${
                                     isStepInvalid()
-                                        ? "bg-transparent text-[#999999] border-[#ECECEC] cursor-not-allowed"
-                                        : "bg-[#262626] text-[#F7F7F7] border-[#262626] hover:opacity-90 active:scale-98"
+                                        ? "bg-transparent text-text-subtle border-border cursor-not-allowed"
+                                        : "bg-text-primary text-bg border-text-primary hover:opacity-90 active:scale-98"
                                 }
                             `}
                         >

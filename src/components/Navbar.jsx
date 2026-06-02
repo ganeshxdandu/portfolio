@@ -128,10 +128,24 @@ const Navbar = ({ view = "portfolio" }) => {
                             onClick={(e) => handleDesktopLink(e, "#")}
                             whileHover={{ x: -2 }}
                             transition={{ duration: 0.2 }}
-                            className="text-[14px] font-outfit font-light tracking-tight text-[#666666] hover:text-[#262626] transition-colors duration-200"
+                            className="text-[14px] font-outfit font-light tracking-tight text-[#666666] dark:text-[#A8A8A8] hover:text-[#262626] dark:hover:text-[#EFEFEF] transition-colors duration-200"
                         >
                             ← Back to Portfolio
                         </motion.a>
+
+                        <div className="w-px h-4 bg-[#ECECEC] dark:bg-[#2A2A2A]" />
+
+                        {/* Theme Toggle – Discovery */}
+                        <motion.button
+                            whileHover={{ rotate: 12, scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                            onClick={handleThemeToggle}
+                            className="cursor-pointer p-2 rounded-sm transition-colors duration-200 text-[#666666] dark:text-[#A8A8A8] hover:text-[#262626] dark:hover:text-[#EFEFEF]"
+                            aria-label="Toggle theme"
+                        >
+                            <ThemeIcon isDark={isDark} />
+                        </motion.button>
                     </div>
                 ) : (
                     <>

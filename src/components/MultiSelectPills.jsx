@@ -37,11 +37,11 @@ const MultiSelectPills = ({ options = [], selected = [], onChange }) => {
                         }}
                         className={`
                             px-5 py-2.5 text-[14px] tracking-tight font-light rounded-full border cursor-pointer select-none
-                            transition-all duration-300 ease-out outline-hidden focus-visible:ring-1 focus-visible:ring-[#262626]
+                            transition-all duration-300 ease-out outline-hidden focus-visible:ring-1 focus-visible:ring-text-primary
                             ${
                                 isSelected
-                                    ? "bg-[#262626] text-[#F7F7F7] border-[#262626]"
-                                    : "bg-transparent text-[#666666] border-[#ECECEC] hover:border-[#262626] hover:text-[#262626]"
+                                    ? "bg-text-primary text-bg border-text-primary"
+                                    : "bg-transparent text-text-muted border-border hover:border-text-primary hover:text-text-primary"
                             }
                         `}
                     >

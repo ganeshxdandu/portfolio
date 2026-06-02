@@ -12,27 +12,21 @@ import Footer from "./components/Footer";
 export const ThemeContext = createContext(null);
 export const useTheme = () => useContext(ThemeContext);
 
-/* ── Easing ─────────────────────────────────────────────────────── */
-// Ease-in-out cubic  (matches design system motion)
-const easeInOutCubic = (t) =>
-    t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
 /* ── App ────────────────────────────────────────────────────────── */
 const App = () => {
     // Sync with whatever the blocking <script> in index.html already set
     const [isDark, setIsDark] = useState(
         () => document.documentElement.classList.contains("dark")
     );
-    const rafRef   = useRef(null);
     const lenisRef = useRef(null);
 
     /* ── Lenis smooth scroll ── */
     useEffect(() => {
         const lenis = new Lenis({
-            duration:  1.4,
-            easing:    (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            duration:    1.4,
+            easing:      (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
             smoothWheel: true,
-            smoothTouch: false,   // native feel on mobile touch
+            smoothTouch: false,
         });
 
         lenisRef.current = lenis;
@@ -52,90 +46,55 @@ const App = () => {
     }, []);
 
     /**
-     * toggleTheme(originX, originY)
+     * toggleTheme()
      *
-     * Exact sequence — no flicker, real mask-reveal:
+     * Blur Dissolve — Apple / Linear / Raycast-grade subtlety.
      *
-     *  Frame A  →  Paint overlay with OLD bg colour (hole radius = 0).
-     *              Page is fully covered; nothing visible changed yet.
+     *  1. Add `.theme-transitioning` to #root.
+     *     CSS transition kicks in: blur 0 → 10px, opacity 1 → 0.88
+     *     over 210ms (ease-in-out).
      *
-     *  Frame B  →  Flip html.dark (content switches underneath overlay).
-     *              User sees nothing — overlay still fully covers page.
+     *  2. At peak blur (210ms), swap html.dark instantly.
+     *     The blur fully conceals the colour repaint — zero visible flash.
      *
-     *  Frame B+ →  rAF loop grows the transparent hole from the button
-     *              origin outward.  Content inside the hole = new theme.
-     *              Content outside = still hidden under old-colour overlay.
+     *  3. Remove `.theme-transitioning` from #root.
+     *     CSS transition runs in reverse: blur 10px → 0, opacity 0.88 → 1
+     *     over 210ms (ease-in-out).
      *
-     *  Done     →  Clear overlay. New theme fully visible everywhere.
+     *  Total: ~420ms. Feels like changing the paper stock beneath the text.
      */
     const toggleTheme = useCallback(
-        (originX, originY) => {
-            const overlay = document.getElementById("theme-reveal");
-            if (!overlay) return;
-
-            // Cancel any in-progress animation
-            if (rafRef.current) cancelAnimationFrame(rafRef.current);
-
+        () => {
+            const HALF_MS  = 210;
+            const root     = document.getElementById("root");
             const nextDark = !isDark;
-            const oldBg    = nextDark ? "#F7F7F7" : "#0F0F0F";
-            const DURATION = 900; // ms  — slower, smoother
 
-            /* ── Helper: write mask at a given hole radius ── */
-            const applyMask = (r) => {
-                const grad = `radial-gradient(circle at ${originX}px ${originY}px, transparent ${r}px, black ${r}px)`;
-                overlay.style.maskImage       = grad;
-                overlay.style.webkitMaskImage = grad;
+            const applyFlip = () => {
+                if (nextDark) {
+                    document.documentElement.classList.add("dark");
+                } else {
+                    document.documentElement.classList.remove("dark");
+                }
+                setIsDark(nextDark);
+                try { localStorage.setItem("theme", nextDark ? "dark" : "light"); } catch (_) {}
             };
 
-            /* ── Frame A: cover page with old colour, hole = 0 ── */
-            overlay.style.backgroundColor = oldBg;
-            applyMask(0);
+            /* Phase 1 — blur in */
+            root.classList.add("theme-transitioning");
 
-            /* ── Frame B: theme flip (still hidden under overlay) ── */
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    /* flip theme — content changes but overlay covers it */
-                    if (nextDark) {
-                        document.documentElement.classList.add("dark");
-                    } else {
-                        document.documentElement.classList.remove("dark");
-                    }
-                    setIsDark(nextDark);
-
-                    // Persist preference
-                    try { localStorage.setItem("theme", nextDark ? "dark" : "light"); } catch (_) {}
-
-                    /* ── Frame B+: animate the growing hole ── */
-                    const maxR = Math.hypot(window.innerWidth, window.innerHeight) * 1.15;
-                    const startTime = performance.now();
-
-                    const animate = (now) => {
-                        const t = Math.min((now - startTime) / DURATION, 1);
-                        applyMask(easeInOutCubic(t) * maxR);
-
-                        if (t < 1) {
-                            rafRef.current = requestAnimationFrame(animate);
-                        } else {
-                            /* Done — remove overlay completely */
-                            overlay.style.backgroundColor = "transparent";
-                            overlay.style.maskImage       = "";
-                            overlay.style.webkitMaskImage = "";
-                            rafRef.current = null;
-                        }
-                    };
-
-                    rafRef.current = requestAnimationFrame(animate);
-                });
-            });
+            /* Phase 2 — swap theme at peak blur, then blur out */
+            setTimeout(() => {
+                applyFlip();
+                setTimeout(() => {
+                    root.classList.remove("theme-transitioning");
+                }, HALF_MS);
+            }, HALF_MS);
         },
         [isDark]
     );
 
     return (
         <ThemeContext.Provider value={{ isDark, toggleTheme, lenisRef }}>
-            {/* Full-screen overlay driven by JS mask animation */}
-            <div id="theme-reveal" />
-
             <Navbar />
             <Hero />
             <About />

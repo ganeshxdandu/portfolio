@@ -40,12 +40,8 @@ const Navbar = () => {
     }, [scrollTo]);
 
     /* ── Theme toggle ── */
-    const handleThemeToggle = useCallback((e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        toggleTheme(
-            rect.left + rect.width  / 2,
-            rect.top  + rect.height / 2
-        );
+    const handleThemeToggle = useCallback(() => {
+        toggleTheme();
     }, [toggleTheme]);
 
     /* ── Shared icon swap animation ── */

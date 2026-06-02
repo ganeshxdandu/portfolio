@@ -63,19 +63,22 @@ html, body {
   /* NO transition here — overlay handles the visual change */
 }
 
-/* ─── Theme-reveal overlay ───────────────────────────────────────── */
+/* ─── Blur-dissolve theme transition ────────────────────────────── */
 /*
-  This is a full-screen element whose background is set to the OLD
-  theme colour by JavaScript. A growing transparent hole is animated
-  into it via JS mask-image, revealing the already-switched new theme
-  content beneath. No CSS animation / @property needed.
+  JS adds .theme-transitioning to #root to blur in (210ms),
+  swaps html.dark at peak, then removes it to blur out (210ms).
+  The transition property handles both directions automatically.
+  No clip-path, no overlays, no masks — just blur + opacity.
 */
-#theme-reveal {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  pointer-events: none;
-  background-color: transparent; /* JS sets this before each reveal */
+#root {
+  transition:
+    filter  210ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 210ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#root.theme-transitioning {
+  filter:  blur(10px);
+  opacity: 0.88;
 }
 
 /* ─── Text animations ────────────────────────────────────────────── */

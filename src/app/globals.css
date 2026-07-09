@@ -56,7 +56,6 @@ html.dark {
 /* ─── Base ───────────────────────────────────────────────────────── */
 
 html, body {
-  font-family: 'Outfit', sans-serif;
   background-color: var(--color-bg);
   color: var(--color-text-primary);
   scroll-behavior: smooth;

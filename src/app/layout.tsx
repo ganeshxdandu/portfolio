@@ -1,6 +1,12 @@
 import "./globals.css";
 import { Metadata } from "next";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Outfit } from "next/font/google";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   title: "Ganesh Dandu - Web Designer & Developer",
@@ -40,12 +46,7 @@ export default function RootLayout({
       <head>
         <meta name="theme-color" content="#F7F7F7" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#0F0F0F" media="(prefers-color-scheme: dark)" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
-          rel="stylesheet"
-        />
+
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link
           rel="icon"
@@ -75,7 +76,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body>
+      <body className={outfit.className}>
         {children}
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-7C3WL3C3K1"} />
       </body>

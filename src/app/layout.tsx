@@ -36,7 +36,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="theme-color" content="#F7F7F7" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#0F0F0F" media="(prefers-color-scheme: dark)" />
